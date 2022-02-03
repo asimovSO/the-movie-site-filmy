@@ -1,32 +1,37 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app v-resize="checkClienScreen">
+    <navbar-header></navbar-header>
+
+    <keep-alive><router-view><main-content></main-content></router-view></keep-alive>
+    <!-- <v-footer absolute padless color="black">GFGG</v-footer> -->
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import NavbarHeader from "@/components/Header.vue";
+import MainContent from "@/components/MainContent.vue";
+import { mapActions } from "vuex";
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+export default {
+  name: "App",
+  components: { NavbarHeader, MainContent },
+  data: () => ({
+    widthOfScreen: 0,
+  }),
+  methods: {
+    ...mapActions(["START_CHANGE_SCREEN"]),
+    checkClienScreen() {
+      this.widthOfScreen = window.innerWidth;
+      if (this.widthOfScreen < 600) {
+        this.START_CHANGE_SCREEN();
+      } else {
+        this.$store.state.mobileScreen = false;
+      }
+    },
+  },
+  // created(){
+  //   this.checkClienScreen()
+  // }
+};
+</script>
+<style lang="scss"></style>
